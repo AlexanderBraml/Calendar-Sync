@@ -325,3 +325,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,windows,linux
+
+pyenv.cfg
+credentials.json
+token.json
