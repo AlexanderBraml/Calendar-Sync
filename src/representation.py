@@ -37,6 +37,14 @@ class Event:
     reminders: List[Reminder]
     reclaim_type: ReclaimType = ReclaimType.NONE
 
+    def as_google_dict(self) -> dict:
+        return {
+            'summary': self.summary,
+            'start': datetime_to_google(self.start_time),
+            'end': datetime_to_google(self.end_time),
+            'reminders': {'useDefault': True, },
+        }
+
     @staticmethod
     def parse_google(ev: dict) -> Event:
         description = ''
@@ -52,3 +60,10 @@ class Event:
 
 def parse_datetime(date: dict):
     return datetime.datetime.strptime(date['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S')
+
+
+def datetime_to_google(date: datetime.datetime) -> dict:
+    return {
+        'dateTime': date.strftime('%Y-%m-%dT%H:%M:%S') + '+01:00',
+        'timeZone': 'Europe/Berlin',
+    }
