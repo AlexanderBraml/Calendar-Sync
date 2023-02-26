@@ -13,16 +13,19 @@ class ReclaimType(Enum):
 
 @dataclass
 class Reminder:
-    method: str
     minutes: str
 
     @staticmethod
-    def parse_google(encoded: str) -> Reminder:
-        pass
+    def parse_google(rem: dict) -> Reminder:
+        return Reminder(rem['minutes'])
 
     @staticmethod
-    def parse_reminders_google(encoded: str) -> List[Reminder]:
-        pass
+    def parse_reminders_google(rems: dict) -> List[Reminder]:
+        reminders = []
+        if 'overrides' in rems:
+            for override in rems['overrides']:
+                reminders.append(Reminder.parse_google(override))
+        return reminders
 
 
 @dataclass
