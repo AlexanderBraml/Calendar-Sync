@@ -24,6 +24,9 @@ def get_day_google(day: datetime.datetime) -> List[Event]:
         events = events_result.get('items', [])
 
         for event in events:
-            print(event)
+            print(Event.parse_google(event))
     except HttpError as error:
         print('An error occurred: %s' % error)
+
+
+get_day_google(datetime.datetime(2023, 2, 26))
