@@ -1,0 +1,127 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="GrazieInspection" enabled="false" level="GRAMMAR_ERROR" enabled_by_default="false" />
+    <inspection_tool class="LanguageDetectionInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyShadowingNamesInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="controller.measurement_config.cnt_fet_measurement_handler.*" />
+          <option value="controller.measurement_config.Measurements.base_measurement.KEI2600" />
+          <option value="controller.measurement_config.Measurements.base_measurement.py_instrument_control_lib" />
+          <option value="controller.measurement_config.Measurements.tranfercharacteristic_measurement.py_instrument_control_lib" />
+          <option value="controller.measurement_config.Measurements.tranfercharacteristic_measurement.SMU_CHANNEL" />
+          <option value="controller.measurement_config.Measurements.tranfercharacteristic_measurement.SMU_UNIT" />
+          <option value="controller.measurement_config.Measurements.tranfercharacteristic_measurement.ERROR_CODE" />
+          <option value="controller.measurement_config.Measurements.testcharacteristics.ERROR_CODE" />
+          <option value="controller.measurement_config.Measurements.testcharacteristics.py_instrument_control_lib" />
+          <option value="controller.measurement_config.Measurements.transfer_characteristic_measurement.SMU_CHANNEL" />
+          <option value="controller.measurement_config.Measurements.transfer_characteristic_measurement.SMU_UNIT" />
+          <option value="controller.measurement_config.Measurements.transfer_characteristic_measurement.ERROR_CODE" />
+          <option value="controller.measurement_config.Measurements.output_characteristic_measurement.SMU_UNIT" />
+          <option value="controller.measurement_config.Measurements.output_characteristic_measurement.ERROR_CODE" />
+          <option value="controller.measurement_config.Measurements.base_measurement.SMU_CHANNEL" />
+          <option value="controller.measurement_config.Measurements.base_measurement.SMU_AUTOZERO" />
+          <option value="controller.measurement_config.Measurements.base_measurement.SMU_DISPLAY" />
+          <option value="controller.measurement_config.Measurements.base_measurement.ERROR_CODE" />
+          <option value="controller.measurement_config.Measurements.base_measurement.SRC_SETTLING" />
+          <option value="controller.measurement_config.Measurements.measurement.ERROR_CODE" />
+          <option value="controller.measurement_config.Measurements.measurement.SMU_CHANNEL" />
+          <option value="controller.measurement_config.Measurements.measurement.SMU_UNIT" />
+          <option value="controller.measurement_config.Measurements.measurement.SMU_DISPLAY" />
+          <option value="controller.measurement_config.Measurements.measurement.SRC_OFF_MODE" />
+          <option value="controller.measurement_config.Measurements.measurement.SRC_FUNC" />
+          <option value="controller.measurement_config.Measurements.measurement.SMU_AUTOZERO" />
+          <option value="controller.measurement_config.Measurements.measurement.py_instrument_control_lib" />
+          <option value="controller.measurement_config.Measurements.measurement.KEI2600" />
+          <option value="controller.measurement_config.Measurements.measurement.SRC_SETTLING" />
+          <option value="Test.py_instrument_control_lib" />
+          <option value="common.SMUDevice.py_instrument_control_lib" />
+          <option value="common.SMUDevice.KEI2600" />
+          <option value="common.Devices.Device.ERROR_CODE" />
+          <option value="common.Devices.SMUDevice.py_instrument_control_lib" />
+          <option value="common.Devices.SMUDevice.KEI2600" />
+          <option value="common.Devices.SMUDevice.SMU_CHANNEL" />
+          <option value="common.Devices.SMUDevice.SMU_UNIT" />
+          <option value="common.Devices.SMUDevice.SMU_AUTOZERO" />
+          <option value="common.Devices.SMUDevice.SRC_FUNC" />
+          <option value="common.Devices.SMUDevice.SRC_OFF_MODE" />
+          <option value="common.Devices.SMUDevice.SRC_SETTLING" />
+          <option value="common.Devices.SMUDevice.SMU_DISPLAY" />
+          <option value="tests.cnt_fet.CntFetTest.SMU_UNIT" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SMU_UNIT" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.KEI2600" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SMU_CHANNEL" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SMU_AUTOZERO" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SRC_FUNC" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SRC_OFF_MODE" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SRC_SETTLING" />
+          <option value="tests.cnt_fet.TransferCharacteristicTest.SMU_DISPLAY" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.KEI2600" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SMU_CHANNEL" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SMU_UNIT" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SMU_AUTOZERO" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SRC_FUNC" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SRC_OFF_MODE" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SRC_SETTLING" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.SMU_DISPLAY" />
+          <option value="common.Devices.Device.py_instrument_control_lib" />
+          <option value="tests.TransferCharacteristicTest.SMU_UNIT" />
+          <option value="tests.Test.py_instrument_control_lib" />
+          <option value="tests.cnt_fet.CNTFETMeasurement.py_instrument_control_lib" />
+          <option value="configs.CntFetConfigs.py_instrument_control_lib" />
+          <option value="configs.CntFetConfigs.SMU_CHANNEL" />
+          <option value="tests.TransferCharacteristicTest.py_instrument_control_lib" />
+          <option value="common.Devices.SMUDevices.KEI2600" />
+          <option value="common.Devices.SMUDevices.py_instrument_control_lib" />
+          <option value="common.Devices.SMUDevices.SMU_CHANNEL" />
+          <option value="tests.cnt_fet.CNTFETTest.SMU_CHANNEL" />
+          <option value="tests.cnt_fet.CNTFETTest.SMU_UNIT" />
+          <option value="tests.cnt_fet.CNTFETTest.SMU_AUTOZERO" />
+          <option value="tests.cnt_fet.CNTFETTest.SRC_FUNC" />
+          <option value="tests.cnt_fet.CNTFETTest.SRC_OFF_MODE" />
+          <option value="tests.cnt_fet.CNTFETTest.SRC_SETTLING" />
+          <option value="tests.cnt_fet.CNTFETTest.SMU_DISPLAY" />
+          <option value="tests.cnt_fet.CNTFETTest.py_instrument_control_lib" />
+          <option value="tests.cnt_fet.GateCurrentTest.SMU_UNIT" />
+          <option value="tests.cnt_fet.GateCurrentTest.py_instrument_control_lib" />
+          <option value="tests.GateCurrentTest.SMU_UNIT" />
+          <option value="tests.GateCurrentTest.py_instrument_control_lib" />
+          <option value="common.devices.Device.ERROR_CODE" />
+          <option value="common.devices.Device.py_instrument_control_lib" />
+          <option value="common.devices.SMUDevices.SMU_CHANNEL" />
+          <option value="common.devices.SMUDevices.KEI2600" />
+          <option value="common.devices.SMUDevices.py_instrument_control_lib" />
+          <option value="tests.cnt_fet.OutputCharacteristicTest.py_instrument_control_lib" />
+          <option value="tests.cnt_fet.OutputCharacteristicTest.SMU_UNIT" />
+          <option value="tests.OutputCharacteristicTest.py_instrument_control_lib" />
+          <option value="tests.OutputCharacteristicTest.SMU_UNIT" />
+          <option value="Logging.Logging" />
+          <option value="Logging.py_instrument_control_lib" />
+          <option value="Logging.Log_Level" />
+          <option value="tests.Test.Log_Level" />
+          <option value="tests.MemristorTest.py_instrument_control_lib" />
+          <option value="tests.MemristorTest.KEI2600Device" />
+          <option value="tests.MemristorTest.SMU_UNIT" />
+          <option value="tests.MemristorTest.SMU_CHANNEL" />
+          <option value="common.devices.SMUDevices.SEND_METHOD" />
+          <option value="TestFixture.Log_Level" />
+          <option value="TestFixture.py_instrument_control_lib" />
+          <option value="foo.Log_Level" />
+          <option value="tests.TransferCharacteristicTest.Log_Level" />
+          <option value="common.Logging.py_instrument_control_lib" />
+          <option value="tests.TransferCharacteristicTest.KEI2600" />
+          <option value="tests.OutputCharacteristicTest.KEI600" />
+          <option value="tests.GateCurrentTest.KEI2600" />
+          <option value="tests.cnt_fet.CNTFETTest.KEI2600" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+      <option name="processCode" value="true" />
+      <option name="processLiterals" value="true" />
+      <option name="processComments" value="true" />
+    </inspection_tool>
+  </profile>
+</component>
