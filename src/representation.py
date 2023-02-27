@@ -50,16 +50,32 @@ class Event:
         description = ''
         if 'description' in ev:
             description = ev['description']
-        return Event(ev['summary'], description, parse_datetime(ev['start']), parse_datetime(ev['end']),
+        return Event(ev['summary'], description, parse_datetime_google(ev['start']), parse_datetime_google(ev['end']),
                      Reminder.parse_reminders_google(ev['reminders']))
 
     @staticmethod
-    def parse_nc(encoded: str) -> Event:
-        pass
+    def parse_nc(ev: str) -> Event:
+        split = ev.split('\n')
+        start = parse_datetime_nc(split[6])
+        end = parse_datetime_nc(split[7])
+        return Event('Event', '', start, end, [])
 
 
-def parse_datetime(date: dict):
+def parse_datetime_google(date: dict):
     return datetime.datetime.strptime(date['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S')
+
+
+def parse_datetime_nc(date: str):
+    formatted = date.replace('DTSTART:', '').replace('DTEND:', '')[:-1]
+
+    year = int(formatted[:4])
+    month = int(formatted[4:6])
+    day = int(formatted[6:8])
+    hour = (int(formatted[9:11]) + 1) % 24
+    min = int(formatted[11:13])
+    sec = int(formatted[13:15])
+
+    return datetime.datetime(year, month, day, hour, min, sec)
 
 
 def datetime_to_google(date: datetime.datetime) -> dict:
