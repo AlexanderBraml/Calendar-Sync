@@ -32,12 +32,20 @@ def get_day_google(day: datetime.datetime) -> List[Event]:
 
 
 def get_day_nc(day: datetime.datetime) -> List[Event]:
-    start_of_day = day.replace(hour=0, minute=0, second=0) - datetime.timedelta(hours=1, minutes=0)
-    end_of_day = day.replace(hour=23, minute=59, second=59) - datetime.timedelta(hours=1, minutes=0)
+    start_of_day = day.replace(hour=0, minute=0, second=0)
+    end_of_day = day.replace(hour=23, minute=59, second=59)
 
     calendars = caldav.DAVClient(webdav_credentials).principal().calendars()
 
     calendar = calendars[2]
     events = calendar.date_search(start_of_day, end_of_day)
 
-    return [Event.parse_nc(ev.data) for ev in events]
+    parsed = []
+    for event in events:
+        ev = Event.parse_nc(event.data)
+        if ev.start_time >= start_of_day:
+            event.load()
+            ev.summary = event.vobject_instance.vevent.summary.value
+            parsed.append(ev)
+
+    return parsed

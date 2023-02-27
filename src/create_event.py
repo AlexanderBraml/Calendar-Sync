@@ -23,8 +23,5 @@ def create_nc(ev: Event) -> None:
     calendar.save_event(
         dtstart=ev.start_time,
         dtend=ev.end_time,
-        summary="Event",
+        summary=ev.summary
     )
-
-
-create_google(Event('Meeting', '', datetime.datetime(2023, 2, 27, 13, 37), datetime.datetime(2023, 2, 27, 15, 00), []))

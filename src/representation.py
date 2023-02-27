@@ -60,6 +60,10 @@ class Event:
         end = parse_datetime_nc(split[7])
         return Event('Event', '', start, end, [])
 
+    def __eq__(self, other) -> bool:
+        return type(other) == Event and self.summary == other.summary and self.start_time == other.start_time \
+            and self.end_time == other.end_time
+
 
 def parse_datetime_google(date: dict):
     return datetime.datetime.strptime(date['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S')
@@ -71,11 +75,11 @@ def parse_datetime_nc(date: str):
     year = int(formatted[:4])
     month = int(formatted[4:6])
     day = int(formatted[6:8])
-    hour = (int(formatted[9:11]) + 1) % 24
+    hour = int(formatted[9:11])
     min = int(formatted[11:13])
     sec = int(formatted[13:15])
 
-    return datetime.datetime(year, month, day, hour, min, sec)
+    return datetime.datetime(year, month, day, hour, min, sec) + datetime.timedelta(hours=1)
 
 
 def datetime_to_google(date: datetime.datetime) -> dict:
@@ -83,3 +87,12 @@ def datetime_to_google(date: datetime.datetime) -> dict:
         'dateTime': date.strftime('%Y-%m-%dT%H:%M:%S') + '+01:00',
         'timeZone': 'Europe/Berlin',
     }
+
+
+def compare_day(day1: List[Event], day2: List[Event]) -> bool:
+    if len(day1) != len(day2):
+        return False
+    for ev1, ev2 in zip(day1, day2):
+        if ev1 != ev2:
+            return False
+    return True
