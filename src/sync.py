@@ -46,8 +46,3 @@ def sync_next_days_to_go(amount: int) -> None:
             for ev in day_go:
                 delete_event_go(ev)
             sync_to_google(day_nc)
-
-
-if __name__ == '__main__':
-    sync_next_days_to_nc(14)
-    sync_next_days_to_go(14)
