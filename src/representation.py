@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Any
 from dataclasses import dataclass
 from enum import Enum
 import datetime
@@ -35,6 +35,7 @@ class Event:
     start_time: datetime.datetime
     end_time: datetime.datetime
     reminders: List[Reminder]
+    raw: Any
     reclaim_type: ReclaimType = ReclaimType.NONE
 
     def as_google_dict(self) -> dict:
@@ -51,14 +52,14 @@ class Event:
         if 'description' in ev:
             description = ev['description']
         return Event(ev['summary'], description, parse_datetime_google(ev['start']), parse_datetime_google(ev['end']),
-                     Reminder.parse_reminders_google(ev['reminders']))
+                     Reminder.parse_reminders_google(ev['reminders']), ev)
 
     @staticmethod
-    def parse_nc(ev: str) -> Event:
-        split = ev.split('\n')
+    def parse_nc(ev) -> Event:
+        split = ev.data.split('\n')
         start = parse_datetime_nc(split[6])
         end = parse_datetime_nc(split[7])
-        return Event('Event', '', start, end, [])
+        return Event('Event', '', start, end, [], ev)
 
     def __eq__(self, other) -> bool:
         return type(other) == Event and self.summary == other.summary and self.start_time == other.start_time \
