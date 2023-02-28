@@ -1,10 +1,10 @@
 import datetime
 from typing import List
 
-from src.create_event import create_google, create_nc
-from src.delete_event import delete_event_nc, delete_event_go
-from src.get_day import get_day_nc, get_day_google, Calendar
-from src.representation import compare_day, Event
+from create_event import create_google, create_nc
+from delete_event import delete_event_nc, delete_event_go
+from get_day import get_day_nc, get_day_google, Calendar
+from representation import compare_day, Event
 
 
 def sync_to_google(events: List[Event]) -> None:

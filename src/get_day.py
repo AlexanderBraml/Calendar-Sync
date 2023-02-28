@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from representation import Event
-from src.env import webdav_credentials, nc_cal_id
+from env import webdav_credentials, nc_cal_id
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 

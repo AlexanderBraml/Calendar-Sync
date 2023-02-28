@@ -1,8 +1,8 @@
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
-from src.env import nc_cal_id
-from src.representation import Event
+from env import nc_cal_id
+from representation import Event
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
