@@ -55,11 +55,26 @@ class Event:
                      Reminder.parse_reminders_google(ev['reminders']), ev)
 
     @staticmethod
-    def parse_nc(ev) -> Event:
+    def parse_nc(ev) -> Event | None:
         split = ev.data.split('\n')
-        start = parse_datetime_nc(split[6])
-        end = parse_datetime_nc(split[7])
-        return Event('Event', '', start, end, [], ev)
+        start_time: str = ''
+        end_time: str = ''
+        summary: str = ''
+        for item in split:
+            if item.startswith('DTSTART;VALUE=DATE:'):
+                return None  # Full day event
+            elif item.startswith('DTSTART'):
+                start_time = item
+            elif item.startswith('DTEND'):
+                end_time = item
+            elif item.startswith('SUMMARY'):
+                summary = item.replace('SUMMARY:', '')
+        try:
+            start = parse_datetime_nc(start_time)
+            end = parse_datetime_nc(end_time)
+            return Event(summary, '', start, end, [], ev)
+        except ValueError:
+            return None
 
     def __eq__(self, other) -> bool:
         return type(other) == Event and self.summary == other.summary and self.start_time == other.start_time \

@@ -1,3 +1,4 @@
+from os.path import abspath
 from typing import List
 import datetime
 from enum import Enum
@@ -13,7 +14,7 @@ from env import webdav_credentials, nc_cal_id
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-g_creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+g_creds = Credentials.from_authorized_user_file(abspath('token.json'), SCOPES)
 
 
 class Calendar(Enum):
@@ -50,10 +51,9 @@ def get_day_nc(day: datetime.datetime, cal: Calendar) -> List[Event]:
 
     parsed = []
     for event in events:
+
         ev = Event.parse_nc(event)
-        if ev.start_time >= start_of_day:
-            event.load()
-            ev.summary = event.vobject_instance.vevent.summary.value
+        if ev is not None and ev.start_time >= start_of_day:
             parsed.append(ev)
 
     return parsed
