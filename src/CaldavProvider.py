@@ -68,10 +68,3 @@ class CaldavProvider(CalProvider):
 
     def parse_reminder(self, raw_reminder: Any) -> Reminder:
         return Reminder()
-
-
-if __name__ == '__main__':
-    from src.env import caldav_credentials
-
-    pro = CaldavProvider(caldav_credentials)
-    print(pro.get_day(datetime.datetime.today() + datetime.timedelta(days=1), ['Persönlich', 'Termine', 'Uni']))
