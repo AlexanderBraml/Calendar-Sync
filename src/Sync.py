@@ -17,23 +17,22 @@ def days_equal(day1: List[Event], day2: List[Event]) -> bool:
 
 @dataclass
 class SyncJob:
-
     source_cal_provider: CalProvider
     target_cal_provider: CalProvider
-    source_cal: str
+    source_cal: List[str]
     target_cal: str
     start_date: datetime.datetime
     end_date: datetime.datetime
 
     def sync(self) -> None:
         amount_of_days: int = (self.end_date - self.start_date).days
-        for delta in range(amount_of_days):
+        for delta in range(amount_of_days + 1):
             day = self.start_date + datetime.timedelta(delta)
-            source_day: List[Event] = self.source_cal_provider.get_day(self.source_cal, day)
-            target_day: List[Event] = self.target_cal_provider.get_day(self.target_cal, day)
+            source_day: List[Event] = self.source_cal_provider.get_day(day, self.source_cal)
+            target_day: List[Event] = self.target_cal_provider.get_day(day, [self.target_cal])
             if not days_equal(source_day, target_day):
-                self.target_cal_provider.delete_events(self.target_cal, source_day)
-                self.target_cal_provider.create_events(self.target_cal, target_day)
+                self.target_cal_provider.delete_events(self.target_cal, target_day)
+                self.target_cal_provider.create_events(self.target_cal, source_day)
 
 
 class Syncer:
