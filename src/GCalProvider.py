@@ -60,8 +60,8 @@ class GCalProvider(CalProvider):
             description = raw_event['description']
 
         return Event(raw_event['summary'], description, False,
-                     parser.parse(raw_event['start']['dateTime'][:16]),
-                     parser.parse(raw_event['end']['dateTime'][:16]),
+                     parser.parse(raw_event['start']['dateTime'][:16]).astimezone(tz=None),
+                     parser.parse(raw_event['end']['dateTime'][:16]).astimezone(tz=None),
                      [self.parse_reminder(raw_event['reminders'])], raw_event)
 
     def parse_reminder(self, raw_reminder: Any) -> Reminder:
