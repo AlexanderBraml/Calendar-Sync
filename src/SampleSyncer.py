@@ -3,7 +3,7 @@ import datetime
 from src.Sync import SyncJob, Syncer
 
 if __name__ == '__main__':
-    from env import nc_url, g_cal_id, nc_to_g_source, nc_to_g_target, g_to_nc_source, g_to_nc_target
+    from env import nc_url, nc_to_g_source, nc_to_g_target, g_to_nc_source, g_to_nc_target
     from CaldavProvider import CaldavProvider
     from GCalProvider import GCalProvider
 
