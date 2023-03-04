@@ -39,7 +39,7 @@ class CaldavProvider(CalProvider):
                 calendar.save_event(summary=event.summary, description=event.description, dtstart=event.start_time,
                                     dtend=event.end_time)
 
-    def delete_event(self, event: Event) -> None:
+    def delete_event(self, cal: str, event: Event) -> None:
         if type(event.raw) != caldav.objects.Event:
             raise ValueError('Cannot delete event which is not from this calendar.')
 
@@ -74,4 +74,4 @@ if __name__ == '__main__':
     from src.env import caldav_credentials
 
     pro = CaldavProvider(caldav_credentials)
-    print(pro.get_day(datetime.datetime.today() + datetime.timedelta(days=1), ['Reclaim']))
+    print(pro.get_day(datetime.datetime.today() + datetime.timedelta(days=1), ['Persönlich', 'Termine', 'Uni']))

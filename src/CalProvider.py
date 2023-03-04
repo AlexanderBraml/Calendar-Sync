@@ -19,12 +19,12 @@ class CalProvider(ABC):
     def create_event(self, cal: str, event: Event) -> None:
         pass
 
-    def delete_events(self, events: List[Event]) -> None:
+    def delete_events(self, cal: str, events: List[Event]) -> None:
         for event in events:
-            self.delete_event(event)
+            self.delete_event(cal, event)
 
     @abstractmethod
-    def delete_event(self, event: Event) -> None:
+    def delete_event(self, cal: str, event: Event) -> None:
         pass
 
     def parse_events(self, events: List[Any]) -> List[Event]:
