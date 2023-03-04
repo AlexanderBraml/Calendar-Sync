@@ -26,6 +26,8 @@ if __name__ == '__main__':
 ```
 In the case of Google Calendar, you first have to get a token and credentials. Please refer to the official [Google Calendar API Documentation](https://developers.google.com/calendar/api/quickstart/python) for further reference.
 
+To always keep the calendars in sync I recommand setting up a VPS or Container to execute the sync every few minutes. I do this in a container using cron.
+
 ## How This Works
 The sync mechanism is very simple. For each day which should be synced, the program retrieves the events of this day in the source calendar.
 It then gets all events of this day in the target calendar, if the two are equal, then there is no further action.
