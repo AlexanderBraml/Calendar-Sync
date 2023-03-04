@@ -2,6 +2,7 @@ import datetime
 from os.path import abspath
 from typing import Any, List
 
+from dateutil import parser
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
@@ -59,13 +60,9 @@ class GCalProvider(CalProvider):
             description = raw_event['description']
 
         return Event(raw_event['summary'], description, False,
-                     self.__parse_datetime(raw_event['start']['dateTime'][:-6]),
-                     self.__parse_datetime(raw_event['end']['dateTime'][:-6]),
+                     parser.parse(raw_event['start']['dateTime'][:16]),
+                     parser.parse(raw_event['end']['dateTime'][:16]),
                      [self.parse_reminder(raw_event['reminders'])], raw_event)
-
-    @staticmethod
-    def __parse_datetime(date: str) -> datetime.datetime:
-        return datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S')
 
     def parse_reminder(self, raw_reminder: Any) -> Reminder:
         return Reminder()
