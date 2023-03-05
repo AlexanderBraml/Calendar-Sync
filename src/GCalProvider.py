@@ -18,16 +18,17 @@ g_service = build('calendar', 'v3', credentials=g_creds)
 class GCalProvider(CalProvider):
 
     def get_day(self, day: datetime.datetime, cal: List[str]) -> List[Event]:
-        start_of_day = day.replace(hour=0, minute=0, second=0, microsecond=0).isoformat() + '+01:00'
+        start_of_day = day.replace(hour=0, minute=0, second=0).astimezone(tz=None)
+        start_of_day_send = day.replace(hour=0, minute=0, second=0).isoformat() + '+01:00'
         end_of_day = day.replace(hour=23, minute=59, second=59, microsecond=0).isoformat() + '+01:00'
 
         raw_events = []
         for calendar in cal:
-            events_result = g_service.events().list(calendarId=calendar, timeMin=start_of_day, timeMax=end_of_day,
+            events_result = g_service.events().list(calendarId=calendar, timeMin=start_of_day_send, timeMax=end_of_day,
                                                     singleEvents=True, orderBy='startTime').execute()
             raw_events += events_result.get('items', [])
 
-        return self.parse_events(raw_events)
+        return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
         g_service.events().insert(calendarId=cal, body=self.__event_as_dict(event)).execute()
