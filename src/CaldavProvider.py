@@ -47,11 +47,11 @@ class CaldavProvider(CalProvider):
         for item in split:
             if item.startswith('DTSTART;VALUE=DATE:') or item.startswith('DTEND;VALUE=DATE:'):
                 return None  # Full day event, currently not supported
-            elif item.startswith('DTSTART'):
+            elif item.startswith('DTSTART') and not start:
                 start = item.replace('DTSTART:', '')
-            elif item.startswith('DTEND'):
+            elif item.startswith('DTEND') and not end:
                 end = item.replace('DTEND:', '')
-            elif item.startswith('SUMMARY'):
+            elif item.startswith('SUMMARY') and not summary:
                 summary = item.replace('SUMMARY:', '')
 
         return Event(summary, '', False, self.__parse_datetime(start), self.__parse_datetime(end), [], raw_event)
