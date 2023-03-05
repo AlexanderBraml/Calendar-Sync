@@ -27,7 +27,7 @@ class GCalProvider(CalProvider):
                                                     singleEvents=True, orderBy='startTime').execute()
             raw_events += events_result.get('items', [])
 
-        return [self.parse_event(event) for event in raw_events]
+        return self.parse_events(raw_events)
 
     def create_event(self, cal: str, event: Event) -> None:
         g_service.events().insert(calendarId=cal, body=self.__event_as_dict(event)).execute()

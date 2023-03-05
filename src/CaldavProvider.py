@@ -24,13 +24,7 @@ class CaldavProvider(CalProvider):
             if calendar.name in cal:
                 raw_events += calendar.date_search(start_of_day, end_of_day)
 
-        parsed = []
-        for raw_event in raw_events:
-            event = self.parse_event(raw_event)
-            if event is not None and event.start_time >= start_of_day:
-                parsed.append(event)
-
-        return parsed
+        return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
         calendars = caldav.DAVClient(self.base_url).principal().calendars()
