@@ -1,4 +1,4 @@
-# Generic-Calendar-Sync
+# Calendar Sync
 
 Lets you sync events from one or multiple source calendars to one target calendar very easily.
 
