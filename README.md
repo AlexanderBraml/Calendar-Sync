@@ -5,7 +5,9 @@ Lets you sync events from one or multiple source calendars to one target calenda
 The original goal of this project was to sync events from a caldav calendar to Google Calendar. Once an early prototype was made, I wanted to make the design more flexible to use other calendars so I designed a generic Calendar Provider which is used to sync events. You can implement your own provider by implementing a concrete subclass of `CalProvider.py`. Already implemented are `CaldavProvider.py`, which can sync events from any caldav url, and `GCalProvider.py`, which syncs from and to Google Calendar, given credentials and a token.
 
 ## How To Sync
-Syncing from one calendar to the other is very easy. You just have to create one or multiple Sync Jobs and then just sync.
+First you have to execute `pip install -r requirements.txt` in order to install all requirements for caldav and the Google Calendar API.
+
+Then syncing from one calendar to the other is very easy. You just have to create one or multiple Sync Jobs and then just sync.
 Here is an example which syncs all events in the next 10 days from a caldav source to the primary Google Calendar:
 ```python3
 import datetime
