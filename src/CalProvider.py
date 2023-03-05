@@ -28,10 +28,10 @@ class CalProvider(ABC):
         pass
 
     def parse_events(self, events: List[Any]) -> List[Event]:
-        return [self.parse_event(event) for event in events]
+        return [self.parse_event(event) for event in events if event is not None]
 
     @abstractmethod
-    def parse_event(self, raw_event: Any) -> Event:
+    def parse_event(self, raw_event: Any) -> Event | None:
         pass
 
     @abstractmethod

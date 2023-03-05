@@ -5,7 +5,7 @@ from typing import List, Any
 
 @dataclass
 class Reminder:
-    minutes: str = 0
+    minutes: int = 0
 
 
 @dataclass

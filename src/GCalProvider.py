@@ -54,7 +54,7 @@ class GCalProvider(CalProvider):
 
         g_service.events().delete(calendarId=cal, eventId=event.raw['id']).execute()
 
-    def parse_event(self, raw_event: dict) -> Event:
+    def parse_event(self, raw_event: dict) -> Event | None:
         description = ''
         if 'description' in raw_event:
             description = raw_event['description']
