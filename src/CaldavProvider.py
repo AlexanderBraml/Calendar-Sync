@@ -1,6 +1,7 @@
 import datetime
 import logging
 from typing import Any, List
+from urllib.parse import urlsplit
 
 import caldav
 
@@ -13,7 +14,7 @@ log = logging.getLogger('calendar_sync')
 class CaldavProvider(CalProvider):
 
     def __init__(self, base_url: str):
-        log.info(f'Setup caldav provider with server {base_url}')
+        log.info(f'Setup caldav provider with server {urlsplit(base_url).hostname}')
         self.base_url = base_url
 
     def get_day(self, day: datetime.datetime, cal: List[str]) -> List[Event]:
@@ -60,3 +61,6 @@ class CaldavProvider(CalProvider):
     def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
         log.warning(f'NOT SUPPORTED: Parsing reminder {raw_reminder} from Caldav Calendar')
         return []
+
+    def __str__(self) -> str:
+        return f'CaldavProvider[{urlsplit(self.base_url).hostname}]'

@@ -89,3 +89,6 @@ class GCalProvider(CalProvider):
             return []
         else:
             return [Reminder(reminder['minutes']) for reminder in raw_reminder['overrides']]
+
+    def __str__(self) -> str:
+        return 'GCalProvider'
