@@ -46,5 +46,5 @@ class CaldavProvider(CalProvider):
                      raw_event.icalendar_component.get("dtend").dt.astimezone(tz=None),
                      [], raw_event)
 
-    def parse_reminder(self, raw_reminder: Any) -> Reminder:
-        return Reminder()
+    def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
+        return []

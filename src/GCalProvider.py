@@ -64,7 +64,10 @@ class GCalProvider(CalProvider):
         return Event(raw_event['summary'], description, False,
                      parser.parse(raw_event['start']['dateTime']),
                      parser.parse(raw_event['end']['dateTime']),
-                     [self.parse_reminder(raw_event['reminders'])], raw_event)
+                     self.parse_reminder(raw_event['reminders']), raw_event)
 
-    def parse_reminder(self, raw_reminder: Any) -> Reminder:
-        return Reminder()
+    def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
+        if raw_reminder['useDefault']:
+            return []
+        else:
+            return [Reminder(reminder['minutes']) for reminder in raw_reminder['overrides']]

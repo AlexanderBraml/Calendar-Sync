@@ -35,5 +35,5 @@ class CalProvider(ABC):
         pass
 
     @abstractmethod
-    def parse_reminder(self, raw_reminder: Any) -> Reminder:
+    def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
         pass
