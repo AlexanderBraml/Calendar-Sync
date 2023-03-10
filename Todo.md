@@ -1,3 +1,0 @@
-- [ ] Add Logging
-- [ ] Support sync of full day events
-- [ ] Static code analysis
