@@ -51,6 +51,7 @@ class GCalProvider(CalProvider):
 
     @staticmethod
     def __datetime_as_dict(date: datetime.datetime) -> dict:
+        log.debug(f'Transforming datetime into dict (dateTime: {date.isoformat()}, timeZone: {date.tzname()})')
         return {
             'dateTime': date.isoformat(),
             'timeZone': date.tzname(),
