@@ -1,4 +1,5 @@
 import datetime
+import logging
 import sys
 
 from src.CaldavProvider import CaldavProvider
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     elif not sys.argv[1].isdigit():
         raise ValueError('You amount of days to be synced is not a number!')
 
-    setup_custom_logger('root')
+    setup_custom_logger('root', logging.INFO)
 
     days = int(sys.argv[1])
     today = datetime.datetime.today()
