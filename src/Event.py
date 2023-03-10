@@ -25,3 +25,6 @@ class Event:
         if not isinstance(other, Event):
             return False
         return self.summary == other.summary and self.start_time == other.start_time and self.end_time == other.end_time
+
+    def __hash__(self):
+        return hash((self.summary, self.start_time, self.end_time))
