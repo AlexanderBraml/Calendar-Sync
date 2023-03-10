@@ -2,7 +2,6 @@ import datetime
 from os.path import abspath
 from typing import Any, List
 
-from dateutil import parser
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
@@ -28,13 +27,7 @@ class GCalProvider(CalProvider):
                                                     orderBy='startTime').execute()
             raw_events += events_result.get('items', [])
 
-        parsed = self.parse_events(raw_events)
-        final = []
-        for event in parsed:
-            if event.start_time >= start_of_day:
-                final.append(event)
-        return final
-        # return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
+        return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
         g_service.events().insert(calendarId=cal, body=self.__event_as_dict(event)).execute()
@@ -45,14 +38,15 @@ class GCalProvider(CalProvider):
             'summary': event.summary,
             'start': GCalProvider.__datetime_as_dict(event.start_time),
             'end': GCalProvider.__datetime_as_dict(event.end_time),
+            'description': event.description,
             'reminders': {'useDefault': True, },
         }
 
     @staticmethod
     def __datetime_as_dict(date: datetime.datetime) -> dict:
         return {
-            'dateTime': date.strftime('%Y-%m-%dT%H:%M:%S') + '+01:00',
-            'timeZone': 'Europe/Berlin',
+            'dateTime': date.isoformat(),
+            'timeZone': date.tzname(),
         }
 
     def delete_event(self, cal: str, event: Event) -> None:
@@ -73,10 +67,3 @@ class GCalProvider(CalProvider):
 
     def parse_reminder(self, raw_reminder: Any) -> Reminder:
         return Reminder()
-
-
-if __name__ == '__main__':
-    from env import g_cal_id
-
-    gcp = GCalProvider()
-    day = gcp.get_day(datetime.datetime(2023, 3, 10), ['primary'])
