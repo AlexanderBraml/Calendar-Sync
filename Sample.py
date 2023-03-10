@@ -3,7 +3,8 @@ import sys
 
 from src.CaldavProvider import CaldavProvider
 from src.GCalProvider import GCalProvider
-from src.Sync import SyncJob, Syncer
+from src.SyncJob import SyncJob
+from src.Syncer import Syncer
 from src.env import nc_url, nc_to_g_source, nc_to_go_target, go_to_nc_source, go_to_nc_target
 
 if __name__ == '__main__':

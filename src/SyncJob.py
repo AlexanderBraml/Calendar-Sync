@@ -6,14 +6,13 @@ from typing import List, Set
 from src.CalProvider import CalProvider
 from src.Event import Event
 
+log = logging.getLogger('calendar_sync')
+
 
 def days_equal(day1: Set[Event], day2: Set[Event]) -> bool:
     if len(day1) != len(day2):
         return False
     return day1 == day2
-
-
-log = logging.getLogger('calendar_sync')
 
 
 @dataclass
@@ -42,19 +41,3 @@ class SyncJob:
                 log.debug('Successfully deleted all events from target day in target calendar')
                 self.target_cal_provider.create_events(self.target_cal, source_day)
                 log.debug('Successfully created all events from source day in target calendar')
-
-
-class Syncer:
-
-    def __init__(self) -> None:
-        self.sync_jobs: List[SyncJob] = []
-
-    def register(self, sync_job: SyncJob) -> None:
-        self.sync_jobs.append(sync_job)
-        log.debug(f'Added {sync_job} to list of sync jobs')
-
-    def sync(self) -> None:
-        for job in self.sync_jobs:
-            log.debug(f'Syncing job {job}')
-            job.sync()
-            log.info('Successfully executed sync job')
