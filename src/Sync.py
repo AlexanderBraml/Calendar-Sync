@@ -26,9 +26,6 @@ class SyncJob:
         for delta in range(amount_of_days + 1):
             day = self.start_date + datetime.timedelta(delta)
 
-            if day == datetime.datetime(2023, 3, 11):
-                pass
-
             source_day: List[Event] = self.source_cal_provider.get_day(day, self.source_cal)
             target_day: List[Event] = self.target_cal_provider.get_day(day, [self.target_cal])
             if not days_equal(set(source_day), set(target_day)):
