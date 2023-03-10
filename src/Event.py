@@ -28,3 +28,6 @@ class Event:
 
     def __hash__(self):
         return hash((self.summary, self.start_time, self.end_time))
+
+    def __str__(self) -> str:
+        return f'Event[{self.summary}, {self.start_time}, {self.end_time}]'
