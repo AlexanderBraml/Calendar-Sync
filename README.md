@@ -12,7 +12,8 @@ Here is an example which syncs all events in the next 10 days from a caldav sour
 ```python3
 import datetime
 
-from src.Sync import SyncJob, Syncer
+from src.SyncJob import SyncJob
+from src.Syncer import Syncer
 from src.CaldavProvider import CaldavProvider
 from src.GCalProvider import GCalProvider
 
@@ -31,12 +32,12 @@ In the case of Google Calendar, you first have to get a token and credentials. P
 To always keep the calendars in sync I recommand setting up a VPS or Container to execute the sync every few minutes. I do this in a container using cron.
 
 ## How This Works
-The sync mechanism is very simple. For each day which should be synced, the program retrieves the events of this day in the source calendar.
+The sync mechanism is very simple. For each day that should be synced, the program retrieves the events of this day in the source calendar.
 It then gets all events of this day in the target calendar, if the two are equal, then there is no further action.
 Otherwise all events in this day in the target calendar are deleted and are replaced by the events from the source calendar.
 There are surely other more efficient ways to do this, but this is very simple and works reliably.
 
 ## What This Does Not Do
-This program does not sync two ways. You cannot keep two calendar in sync as of today. You can take this code as a starting point and implement it yourself if you need it. It was not a priority for me.
+This program does not sync two ways. You cannot keep two calendars in sync as of today. You can take this code as a starting point and implement it yourself if you need it. It was not a priority for me.
 
 Currently full day events are not supported. Maybe I'll work on them in the future and integrate them.
