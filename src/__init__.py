@@ -1,10 +1,15 @@
 import logging
 
+log_file = 'calendar-sync.log'
+
 
 def setup_logger(name, log_level):
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s:%(lineno)s %(message)s', '%Y-%m-%d %H:%M:%S')
 
-    handler = logging.StreamHandler()
+    if log_file:
+        handler = logging.FileHandler(log_file, mode='a')
+    else:
+        handler = logging.StreamHandler()
     handler.setFormatter(formatter)
 
     logger = logging.getLogger(name)
