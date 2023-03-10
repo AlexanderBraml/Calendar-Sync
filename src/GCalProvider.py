@@ -40,7 +40,7 @@ class GCalProvider(CalProvider):
             'start': GCalProvider.__datetime_as_dict(event.start_time),
             'end': GCalProvider.__datetime_as_dict(event.end_time),
             'description': event.description,
-            'reminders': {'useDefault': True, },
+            'reminders': GCalProvider.__reminder_as_dict(event.reminder),
         }
 
     @staticmethod
@@ -49,6 +49,14 @@ class GCalProvider(CalProvider):
             'dateTime': date.isoformat(),
             'timeZone': date.tzname(),
         }
+
+    @staticmethod
+    def __reminder_as_dict(reminders: List[Reminder]):
+        if len(reminders) == 0:
+            return {'useDefault': True, }
+        else:
+            return {'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': reminder.minutes}
+                                                       for reminder in reminders]}
 
     def delete_event(self, cal: str, event: Event) -> None:
         if type(event.raw) != dict:
