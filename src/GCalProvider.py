@@ -19,16 +19,22 @@ class GCalProvider(CalProvider):
 
     def get_day(self, day: datetime.datetime, cal: List[str]) -> List[Event]:
         start_of_day = day.replace(hour=0, minute=0, second=0).astimezone(tz=None)
-        start_of_day_send = day.replace(hour=0, minute=0, second=0).isoformat() + '+01:00'
-        end_of_day = day.replace(hour=23, minute=59, second=59, microsecond=0).isoformat() + '+01:00'
+        end_of_day = day.replace(hour=23, minute=59, second=59, microsecond=0).astimezone(tz=None).isoformat()
 
         raw_events = []
         for calendar in cal:
-            events_result = g_service.events().list(calendarId=calendar, timeMin=start_of_day_send, timeMax=end_of_day,
-                                                    singleEvents=True, orderBy='startTime').execute()
+            events_result = g_service.events().list(calendarId=calendar, timeMin=start_of_day.isoformat(),
+                                                    timeMax=end_of_day, singleEvents=True,
+                                                    orderBy='startTime').execute()
             raw_events += events_result.get('items', [])
 
-        return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
+        parsed = self.parse_events(raw_events)
+        final = []
+        for event in parsed:
+            if event.start_time >= start_of_day:
+                final.append(event)
+        return final
+        # return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
         g_service.events().insert(calendarId=cal, body=self.__event_as_dict(event)).execute()
@@ -61,9 +67,16 @@ class GCalProvider(CalProvider):
             description = raw_event['description']
 
         return Event(raw_event['summary'], description, False,
-                     parser.parse(raw_event['start']['dateTime'][:16]).astimezone(tz=None),
-                     parser.parse(raw_event['end']['dateTime'][:16]).astimezone(tz=None),
+                     datetime.datetime.fromisoformat(raw_event['start']['dateTime']),
+                     datetime.datetime.fromisoformat(raw_event['end']['dateTime']),
                      [self.parse_reminder(raw_event['reminders'])], raw_event)
 
     def parse_reminder(self, raw_reminder: Any) -> Reminder:
         return Reminder()
+
+
+if __name__ == '__main__':
+    from env import g_cal_id
+
+    gcp = GCalProvider()
+    day = gcp.get_day(datetime.datetime(2023, 3, 10), ['primary'])
