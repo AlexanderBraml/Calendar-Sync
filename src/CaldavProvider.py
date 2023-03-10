@@ -21,7 +21,7 @@ class CaldavProvider(CalProvider):
         raw_events = []
         for calendar in calendars:
             if calendar.name in cal:
-                raw_events += calendar.date_search(start_of_day, end_of_day)
+                raw_events += calendar.search(start=start_of_day, end=end_of_day, event=True, expand=True)
 
         return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
