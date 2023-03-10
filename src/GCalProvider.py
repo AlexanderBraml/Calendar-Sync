@@ -1,4 +1,5 @@
 import datetime
+import logging
 from os.path import abspath
 from typing import Any, List
 
@@ -9,15 +10,17 @@ from googleapiclient.discovery import build
 from src.CalProvider import CalProvider
 from src.Event import Reminder, Event
 
-G_SCOPES = ['https://www.googleapis.com/auth/calendar']
+log = logging.getLogger('calendar_sync')
 
-g_creds = Credentials.from_authorized_user_file(abspath('token.json'), G_SCOPES)
+g_scopes = ['https://www.googleapis.com/auth/calendar']
+g_creds = Credentials.from_authorized_user_file(abspath('token.json'), g_scopes)
 g_service = build('calendar', 'v3', credentials=g_creds)
 
 
 class GCalProvider(CalProvider):
 
     def get_day(self, day: datetime.datetime, cal: List[str]) -> List[Event]:
+        log.info(f'Getting all events from Google Calendar ({cal}) for {day.date()}')
         start_of_day = day.replace(hour=0, minute=0, second=0).astimezone(tz=None)
         end_of_day = day.replace(hour=23, minute=59, second=59, microsecond=0).astimezone(tz=None).isoformat()
 
@@ -27,11 +30,14 @@ class GCalProvider(CalProvider):
                                                     timeMax=end_of_day, singleEvents=True,
                                                     orderBy='startTime').execute()
             raw_events += events_result.get('items', [])
+        log.debug(f'Raw events received from Google Calendar: {raw_events}')
 
         return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
+        log.info(f'Creating event {event} in Google Calendar ({cal})')
         g_service.events().insert(calendarId=cal, body=self.__event_as_dict(event)).execute()
+        log.info(f'Successfully created event {event} in Google Calendar')
 
     @staticmethod
     def __event_as_dict(event: Event) -> dict:
@@ -59,12 +65,15 @@ class GCalProvider(CalProvider):
                                                        for reminder in reminders]}
 
     def delete_event(self, cal: str, event: Event) -> None:
+        log.info(f'Deleting event {event} in Google Calendar ({cal})')
         if type(event.raw) != dict:
             raise ValueError('Cannot delete event which is not from this calendar.')
 
         g_service.events().delete(calendarId=cal, eventId=event.raw['id']).execute()
+        log.info(f'Successfully deleted event {event} in Google Calendar')
 
     def parse_event(self, raw_event: dict) -> Event | None:
+        log.debug(f'Parsing event {raw_event} from Google Calendar')
         description = ''
         if 'description' in raw_event:
             description = raw_event['description']
@@ -75,6 +84,7 @@ class GCalProvider(CalProvider):
                      self.parse_reminder(raw_event['reminders']), raw_event)
 
     def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
+        log.debug(f'Parsing reminder {raw_reminder} from Google Calendar')
         if raw_reminder['useDefault']:
             return []
         else:
