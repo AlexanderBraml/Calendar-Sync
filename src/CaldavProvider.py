@@ -2,7 +2,6 @@ import datetime
 from typing import Any, List
 
 import caldav
-from dateutil import parser
 
 from src.CalProvider import CalProvider
 from src.Event import Reminder, Event
@@ -40,25 +39,12 @@ class CaldavProvider(CalProvider):
         event.raw.delete()
 
     def parse_event(self, raw_event: caldav.objects.Event) -> Event | None:
-        split = raw_event.data.split('\n')
-        start: str = ''
-        end: str = ''
-        summary: str = ''
-        for item in split:
-            if item.startswith('DTSTART;VALUE=DATE:') or item.startswith('DTEND;VALUE=DATE:'):
-                return None  # Full day event, currently not supported
-            elif item.startswith('DTSTART') and not start:
-                start = item.replace('DTSTART:', '')
-            elif item.startswith('DTEND') and not end:
-                end = item.replace('DTEND:', '')
-            elif item.startswith('SUMMARY') and not summary:
-                summary = item.replace('SUMMARY:', '')
-
-        return Event(summary, '', False, self.__parse_datetime(start), self.__parse_datetime(end), [], raw_event)
-
-    @staticmethod
-    def __parse_datetime(date: str) -> datetime.datetime:
-        return parser.parse(date).replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
+        return Event(str(raw_event.icalendar_component.get("summary")),
+                     str(raw_event.icalendar_component.get("description")),
+                     False,
+                     raw_event.icalendar_component.get("dtstart").dt.astimezone(tz=None),
+                     raw_event.icalendar_component.get("dtend").dt.astimezone(tz=None),
+                     [], raw_event)
 
     def parse_reminder(self, raw_reminder: Any) -> Reminder:
         return Reminder()
