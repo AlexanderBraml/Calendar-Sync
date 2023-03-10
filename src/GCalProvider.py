@@ -20,7 +20,7 @@ g_service = build('calendar', 'v3', credentials=g_creds)
 class GCalProvider(CalProvider):
 
     def get_day(self, day: datetime.datetime, cal: List[str]) -> List[Event]:
-        log.info(f'Getting all events from Google Calendar ({cal}) for {day.date()}')
+        log.debug(f'Getting all events from Google Calendar ({cal}) for {day.date()}')
         start_of_day = day.replace(hour=0, minute=0, second=0).astimezone(tz=None)
         end_of_day = day.replace(hour=23, minute=59, second=59, microsecond=0).astimezone(tz=None).isoformat()
 
@@ -35,7 +35,7 @@ class GCalProvider(CalProvider):
         return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
-        log.info(f'Creating event {event} in Google Calendar ({cal})')
+        log.debug(f'Creating event {event} in Google Calendar ({cal})')
         g_service.events().insert(calendarId=cal, body=self.__event_as_dict(event)).execute()
         log.info(f'Successfully created event {event} in Google Calendar')
 
@@ -65,7 +65,7 @@ class GCalProvider(CalProvider):
                                                        for reminder in reminders]}
 
     def delete_event(self, cal: str, event: Event) -> None:
-        log.info(f'Deleting event {event} in Google Calendar ({cal})')
+        log.debug(f'Deleting event {event} in Google Calendar ({cal})')
         if type(event.raw) != dict:
             raise ValueError('Cannot delete event which is not from this calendar.')
 

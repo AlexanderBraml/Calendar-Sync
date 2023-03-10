@@ -18,7 +18,7 @@ class CaldavProvider(CalProvider):
         self.base_url = base_url
 
     def get_day(self, day: datetime.datetime, cal: List[str]) -> List[Event]:
-        log.info(f'Getting all events from Caldav Calendar ({cal}) for {day.date()}')
+        log.debug(f'Getting all events from Caldav Calendar ({cal}) for {day.date()}')
         start_of_day = day.replace(hour=0, minute=0, second=0).astimezone(tz=None)
         end_of_day = day.replace(hour=23, minute=59, second=59).astimezone(tz=None)
 
@@ -33,7 +33,7 @@ class CaldavProvider(CalProvider):
         return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
 
     def create_event(self, cal: str, event: Event) -> None:
-        log.info(f'Creating event {event} in Caldav Calendar ({cal})')
+        log.debug(f'Creating event {event} in Caldav Calendar ({cal})')
         calendars = caldav.DAVClient(self.base_url).principal().calendars()
         for calendar in calendars:
             if calendar.name == cal:
@@ -42,7 +42,7 @@ class CaldavProvider(CalProvider):
         log.info(f'Successfully created event {event} in Caldav Calendar')
 
     def delete_event(self, cal: str, event: Event) -> None:
-        log.info(f'Deleting event {event} in Caldav Calendar ({cal})')
+        log.debug(f'Deleting event {event} in Caldav Calendar ({cal})')
         if type(event.raw) != caldav.objects.Event:
             raise ValueError('Cannot delete event which is not from this calendar.')
 
