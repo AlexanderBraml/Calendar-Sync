@@ -44,13 +44,16 @@ class GCalProvider(CalProvider):
 
     @staticmethod
     def __event_as_dict(event: Event) -> dict:
-        return {
+        result = {
             'summary': event.summary,
             'start': GCalProvider.__datetime_as_dict(event.start_time, event.is_all_day),
             'end': GCalProvider.__datetime_as_dict(event.end_time, event.is_all_day),
             'description': event.description,
-            'reminders': GCalProvider.__reminder_as_dict(event.reminder),
+            'reminders': GCalProvider.__reminder_as_dict(event.reminder)
         }
+        if event.is_all_day:
+            result['transparency'] = 'transparent',  # TODO: support sync of transparency (free / busy)
+        return result
 
     @staticmethod
     def __datetime_as_dict(dt: datetime.datetime, is_all_day: bool) -> dict:
