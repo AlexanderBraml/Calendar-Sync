@@ -39,5 +39,3 @@ There are surely other more efficient ways to do this, but this is very simple a
 
 ## What This Does Not Do
 This program does not sync two ways. You cannot keep two calendars in sync as of today. You can take this code as a starting point and implement it yourself if you need it. It was not a priority for me.
-
-Currently full day events are not supported. Maybe I'll work on them in the future and integrate them.
