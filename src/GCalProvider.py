@@ -3,6 +3,7 @@ import logging
 from os.path import abspath
 from typing import Any, List
 
+import pytz
 from dateutil import parser
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -51,10 +52,12 @@ class GCalProvider(CalProvider):
 
     @staticmethod
     def __datetime_as_dict(date: datetime.datetime) -> dict:
-        log.debug(f'Transforming datetime into dict (dateTime: {date.isoformat()}, timeZone: {date.tzname()})')
+        normal_timezone = pytz.timezone('UTC')
+        normalized = normal_timezone.normalize(date)
+        log.debug(f'Transforming datetime into dict (dateTime: {normalized.isoformat()}, timeZone: {str(normalized)})')
         return {
-            'dateTime': date.isoformat(),
-            'timeZone': date.tzname(),
+            'dateTime': normalized.isoformat(),
+            'timeZone': str(normal_timezone),
         }
 
     @staticmethod
