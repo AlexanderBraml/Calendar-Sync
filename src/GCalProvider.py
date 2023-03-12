@@ -53,16 +53,16 @@ class GCalProvider(CalProvider):
         }
 
     @staticmethod
-    def __datetime_as_dict(date: datetime.datetime, is_all_day: bool) -> dict:
+    def __datetime_as_dict(dt: datetime.datetime, is_all_day: bool) -> dict:
         normal_timezone = pytz.timezone('UTC')
         if is_all_day:
-            log.debug(f'Transforming date into dict (date: {date.isoformat()}, timeZone: {str(normal_timezone)})')
+            log.debug(f'Transforming date into dict (date: {dt.isoformat()}, timeZone: {str(normal_timezone)})')
             return {
-                'date': date.isoformat(),
+                'date': dt.date().isoformat(),
                 'timeZone': str(normal_timezone),
             }
         else:
-            normalized = normal_timezone.normalize(date)
+            normalized = normal_timezone.normalize(dt)
             log.debug(f'Transforming datetime into dict (dateTime: {normalized.isoformat()}, '
                       f'timeZone: {str(normalized)})')
             return {
