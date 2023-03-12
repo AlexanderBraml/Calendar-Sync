@@ -33,7 +33,9 @@ class GCalProvider(CalProvider):
             raw_events += events_result.get('items', [])
         log.debug(f'Raw events received from Google Calendar: {raw_events}')
 
-        return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
+        return [event for event in self.parse_events(raw_events)
+                if (event.is_all_day and event.start_time.date() == day.date())
+                or (not event.is_all_day and event.start_time >= start_of_day)]
 
     def create_event(self, cal: str, event: Event) -> None:
         log.debug(f'Creating event {event} in Google Calendar ({cal})')
@@ -44,21 +46,29 @@ class GCalProvider(CalProvider):
     def __event_as_dict(event: Event) -> dict:
         return {
             'summary': event.summary,
-            'start': GCalProvider.__datetime_as_dict(event.start_time),
-            'end': GCalProvider.__datetime_as_dict(event.end_time),
+            'start': GCalProvider.__datetime_as_dict(event.start_time, event.is_all_day),
+            'end': GCalProvider.__datetime_as_dict(event.end_time, event.is_all_day),
             'description': event.description,
             'reminders': GCalProvider.__reminder_as_dict(event.reminder),
         }
 
     @staticmethod
-    def __datetime_as_dict(date: datetime.datetime) -> dict:
+    def __datetime_as_dict(date: datetime.datetime, is_all_day: bool) -> dict:
         normal_timezone = pytz.timezone('UTC')
-        normalized = normal_timezone.normalize(date)
-        log.debug(f'Transforming datetime into dict (dateTime: {normalized.isoformat()}, timeZone: {str(normalized)})')
-        return {
-            'dateTime': normalized.isoformat(),
-            'timeZone': str(normal_timezone),
-        }
+        if is_all_day:
+            log.debug(f'Transforming date into dict (date: {date.isoformat()}, timeZone: {str(normal_timezone)})')
+            return {
+                'date': date.isoformat(),
+                'timeZone': str(normal_timezone),
+            }
+        else:
+            normalized = normal_timezone.normalize(date)
+            log.debug(f'Transforming datetime into dict (dateTime: {normalized.isoformat()}, '
+                      f'timeZone: {str(normalized)})')
+            return {
+                'dateTime': normalized.isoformat(),
+                'timeZone': str(normal_timezone),
+            }
 
     @staticmethod
     def __reminder_as_dict(reminders: List[Reminder]):
@@ -82,14 +92,20 @@ class GCalProvider(CalProvider):
         if 'description' in raw_event:
             description = raw_event['description']
 
-        return Event(raw_event['summary'], description, False,
-                     parser.parse(raw_event['start']['dateTime']),
-                     parser.parse(raw_event['end']['dateTime']),
+        is_all_day = 'date' in raw_event['start']
+        if is_all_day:
+            key = 'date'
+        else:
+            key = 'dateTime'
+
+        return Event(raw_event['summary'], description, is_all_day,
+                     parser.parse(raw_event['start'][key]),
+                     parser.parse(raw_event['end'][key]),
                      self.parse_reminder(raw_event['reminders']), raw_event)
 
     def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
         log.debug(f'Parsing reminder {raw_reminder} from Google Calendar')
-        if raw_reminder['useDefault']:
+        if raw_reminder['useDefault'] or 'overrides' not in raw_reminder:
             return []
         else:
             return [Reminder(reminder['minutes']) for reminder in raw_reminder['overrides']]

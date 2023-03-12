@@ -30,7 +30,9 @@ class CaldavProvider(CalProvider):
                 raw_events += calendar.search(start=start_of_day, end=end_of_day, event=True, expand=True)
         log.debug(f'Raw events received from Caldav Calendar: {raw_events}')
 
-        return [event for event in self.parse_events(raw_events) if event.start_time >= start_of_day]
+        return [event for event in self.parse_events(raw_events)
+                if (event.is_all_day and event.end_time == day.date())
+                or (not event.is_all_day and event.start_time >= start_of_day)]
 
     def create_event(self, cal: str, event: Event) -> None:
         log.debug(f'Creating event {event} in Caldav Calendar ({cal})')
@@ -51,12 +53,20 @@ class CaldavProvider(CalProvider):
 
     def parse_event(self, raw_event: caldav.objects.Event) -> Event | None:
         log.debug(f'Parsing event {raw_event} from Caldav Calendar')
-        return Event(str(raw_event.icalendar_component.get("summary")),
-                     str(raw_event.icalendar_component.get("description")),
-                     False,
-                     raw_event.icalendar_component.get("dtstart").dt.astimezone(tz=None),
-                     raw_event.icalendar_component.get("dtend").dt.astimezone(tz=None),
-                     [], raw_event)
+
+        description = str(raw_event.icalendar_component.get("description"))
+        summary = str(raw_event.icalendar_component.get("summary"))
+        start = raw_event.icalendar_component.get("dtstart").dt
+        end = raw_event.icalendar_component.get("dtend").dt
+        is_all_day = type(start) == datetime.date
+
+        event = Event(summary, description, is_all_day, start, end, [], raw_event)
+
+        if not is_all_day:
+            event.start_time = event.start_time.astimezone(tz=None)
+            event.end_time = event.end_time.astimezone(tz=None)
+
+        return event
 
     def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
         log.warning(f'NOT SUPPORTED: Parsing reminder {raw_reminder} from Caldav Calendar')
