@@ -31,7 +31,7 @@ class CaldavProvider(CalProvider):
         log.debug(f'Raw events received from Caldav Calendar: {raw_events}')
 
         return [event for event in self.parse_events(raw_events)
-                if (event.is_all_day and event.end_time == day.date())
+                if (event.is_all_day and event.start_time.date() == day.date())
                 or (not event.is_all_day and event.start_time >= start_of_day)]
 
     def create_event(self, cal: str, event: Event) -> None:
@@ -54,19 +54,17 @@ class CaldavProvider(CalProvider):
     def parse_event(self, raw_event: caldav.objects.Event) -> Event | None:
         log.debug(f'Parsing event {raw_event} from Caldav Calendar')
 
-        description = str(raw_event.icalendar_component.get("description"))
+        descr = str(raw_event.icalendar_component.get("description"))
         summary = str(raw_event.icalendar_component.get("summary"))
         start = raw_event.icalendar_component.get("dtstart").dt
         end = raw_event.icalendar_component.get("dtend").dt
         is_all_day = type(start) == datetime.date
 
-        event = Event(summary, description, is_all_day, start, end, [], raw_event)
+        if is_all_day:
+            start = datetime.datetime.combine(start, datetime.time(0))
+            end = datetime.datetime.combine(end, datetime.time(0))
 
-        if not is_all_day:
-            event.start_time = event.start_time.astimezone(tz=None)
-            event.end_time = event.end_time.astimezone(tz=None)
-
-        return event
+        return Event(summary, descr, is_all_day, start.astimezone(tz=None), end.astimezone(tz=None), [], raw_event)
 
     def parse_reminder(self, raw_reminder: Any) -> List[Reminder]:
         log.warning(f'NOT SUPPORTED: Parsing reminder {raw_reminder} from Caldav Calendar')
